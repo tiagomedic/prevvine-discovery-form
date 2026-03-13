@@ -51,7 +51,7 @@ const A13_OPTIONS = ["Análises mais superficiais por falta de tempo","Demora no
 // Solicitante
 const B1_OPTIONS = ["Demora excessiva na resposta","Negativas sem justificativa clínica adequada","Necessidade de refazer a solicitação","Dificuldade de contato com a auditoria","Critérios inconsistentes entre auditores","Sistema de envio complicado ou instável","Falta de feedback sobre o status"];
 const B5_OPTIONS = ["Menos de 5","5 a 15","15 a 30","Mais de 30"];
-const B6_OPTIONS = ["Exames de imagem","Exames laboratoriais","Procedimentos cirúrgicos","Internações","Medicamentos de alto custo","Terapias (fisio, fono etc.)"];
+const B6_OPTIONS = ["Exames de imagem","Exames laboratoriais","Procedimentos cirúrgicos","Internações","Prolongamento de internação","Medicamentos de alto custo","Terapias (fisio, fono etc.)"];
 const B7_OPTIONS = ["Menos de 24 horas","1 a 3 dias","3 a 7 dias","Mais de 7 dias","Varia muito"];
 const B8_OPTIONS = ["Raramente (menos de 10%)","Ocasionalmente (10% a 30%)","Frequentemente (mais de 30%)"];
 const B9_OPTIONS = ["Sim, sempre claro","Às vezes claro, às vezes não","Raramente claro","Nunca recebo justificativa"];
@@ -250,23 +250,18 @@ function buildSolicitantePages(data, setData) {
   const set = (k, v) => setData((p) => ({ ...p, solicitante: { ...(p.solicitante || {}), [k]: v } }));
   return [
     { title: "Dores e Gargalos", subtitle: "Seus maiores problemas com autorização", content: (<>
-      <Q label="Quais são os MAIORES PROBLEMAS no processo de autorização?" sublabel="Marque até 3" required><CheckboxGroup options={B1_OPTIONS} values={d.b1||[]} onChange={(v)=>set("b1",v)} max={3} /></Q>
       <Q label="Se pudesse mudar UMA COISA no processo, o que seria?" required><TextInput value={d.b2||""} onChange={(v)=>set("b2",v)} placeholder="Sua resposta..." /></Q>
       <Q label="Descreva livremente suas frustrações, dificuldades ou sugestões."><TextInput value={d.b3||""} onChange={(v)=>set("b3",v)} placeholder="Inclua impacto no atendimento aos pacientes..." multiline /></Q>
-    </>), validate: () => (d.b1||[]).length > 0 && (d.b2||"").trim().length > 0 },
+    </>), validate: () => (d.b2||"").trim().length > 0 },
     { title: "Experiência com Autorização", subtitle: "Sua rotina de solicitações", content: (<>
-      <Q label="Qual é a sua especialidade médica principal?" required><TextInput value={d.b4||""} onChange={(v)=>set("b4",v)} placeholder="Ex: Ortopedia, Cardiologia..." /></Q>
-      <Q label="Quantas solicitações faz por semana?" required><RadioGroup options={B5_OPTIONS} value={d.b5} onChange={(v)=>set("b5",v)} /></Q>
+      <Q label="Qual é a sua especialidade médica com maior demanda complexa da auditoria?" required><TextInput value={d.b4||""} onChange={(v)=>set("b4",v)} placeholder="Ex: Ortopedia, Cardiologia..." /></Q>
       <Q label="Tipo de solicitação MAIS FREQUENTE?" sublabel="Múltipla escolha"><CheckboxGroup options={B6_OPTIONS} values={d.b6||[]} onChange={(v)=>set("b6",v)} /></Q>
-      <Q label="Tempo médio para receber resposta?" required><RadioGroup options={B7_OPTIONS} value={d.b7} onChange={(v)=>set("b7",v)} /></Q>
-      <Q label="Frequência de NEGATIVAS?" required><RadioGroup options={B8_OPTIONS} value={d.b8} onChange={(v)=>set("b8",v)} /></Q>
-      <Q label="O motivo da negativa é claro e justificado?" required><RadioGroup options={B9_OPTIONS} value={d.b9} onChange={(v)=>set("b9",v)} /></Q>
-    </>), validate: () => (d.b4||"").trim() && d.b5 && d.b7 && d.b8 && d.b9 },
+    </>), validate: () => (d.b4||"").trim() },
     { title: "Impacto Clínico", subtitle: "Como o processo afeta seu atendimento", content: (<>
       <Q label="Como envia as solicitações atualmente?" sublabel="Múltipla escolha"><CheckboxGroup options={B10_OPTIONS} values={d.b10||[]} onChange={(v)=>set("b10",v)} /></Q>
-      <Q label="Tempo diário gasto com burocracia de autorização?" required><RadioGroup options={B11_OPTIONS} value={d.b11} onChange={(v)=>set("b11",v)} /></Q>
+      <Q label="Qual a média de tempo diário gasto com burocracia de autorização para um paciente?" required><RadioGroup options={B11_OPTIONS} value={d.b11} onChange={(v)=>set("b11",v)} /></Q>
       <Q label="A demora já impactou negativamente algum paciente?" required><RadioGroup options={B12_OPTIONS} value={d.b12} onChange={(v)=>set("b12",v)} /></Q>
-      <Q label="Utilizaria uma ferramenta digital? O que precisaria ter?"><TextInput value={d.b13||""} onChange={(v)=>set("b13",v)} placeholder="Descreva..." multiline /></Q>
+      <Q label="Na sua opinião, se fosse utilizar uma ferramenta digital, o que precisaria ter?"><TextInput value={d.b13||""} onChange={(v)=>set("b13",v)} placeholder="Descreva..." multiline /></Q>
     </>), validate: () => d.b11 && d.b12 },
   ];
 }
